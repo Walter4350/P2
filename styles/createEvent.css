@@ -1,4 +1,4 @@
-.div_overlay_create_event {
+.div_overlay {
     display: none;
     position: fixed;
     inset: 0;
@@ -10,7 +10,7 @@
     width: 600px;
     height: 500px;
     background-color: white;
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
     outline-style: solid;
     outline-width: 2px;
     border-color: #211A51;

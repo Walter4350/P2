@@ -1,6 +1,7 @@
 //Dom Content Load
 const overlayCreateEvent = document.getElementById("overlay_create_event");
-const eventList = document.getElementById("event_list")
+const overlayEvent = document.getElementById("overlay_event");
+const eventList = document.getElementById("event_list");
 
 const createEventTitle = document.getElementById("input_event_create_title");
 const createEventPrice = document.getElementById("input_event_create_price");
@@ -10,14 +11,21 @@ const createEventLocation = document.getElementById("input_event_create_location
 const createEventCategory = document.getElementById("select_event_create_category");
 const createEventDescription = document.getElementById("textarea_input_event_description");
 
+const overlayEventTitle = document.getElementById("overlay_event_title");
+const overlayEventPrice = document.getElementById("overlay_event_price");
+const overlayEventLocation = document.getElementById("overlay_event_location");
+const overlayEventDescription = document.getElementById("overlay_event_description");
+
 const buttonOverlayCreateEventOpen = document.getElementById("button_overlay_create_event_open");
 const buttonOverlayCreateEventClose = document.getElementById("button_overlay_create_event_close");
 const buttonCreateEvent = document.getElementById("button_event_create");
+const buttonOverlayClose = document.getElementById("button_overlay_event_close");
 
 //EventListeneres
 buttonOverlayCreateEventOpen.addEventListener("click", openOverlayCreateEvent);
 buttonOverlayCreateEventClose.addEventListener("click", closeOverlayCreateEvent);
 buttonCreateEvent.addEventListener("click", createEvent);
+buttonOverlayClose.addEventListener("click", closeOverlayEvent);
 
 //Functions
 function openOverlayCreateEvent() {
@@ -28,9 +36,23 @@ function closeOverlayCreateEvent() {
     overlayCreateEvent.style.display = "none";
 }
 
+function openOverlayEvent(event) {
+    overlayEventTitle.textContent = event.title;
+    overlayEventPrice.textContent = event.price;
+    overlayEventLocation.textContent = event.location;
+    overlayEventDescription.textContent = event.description;
+
+    overlayEvent.style.display = "flex";
+}
+
+function closeOverlayEvent() {
+    overlayEvent.style.display = "none";
+}
+
 let eventArray = [];
 function createEvent() {
     let newEvent = {
+        id: eventArray.length,
         title: createEventTitle.value,
         price: createEventPrice.value,
         date: createEventDate.value,
@@ -55,7 +77,9 @@ function displayEvents() {
     eventList.innerHTML = "";
     for(let event of eventArray){
         let newEvent = document.createElement("div");
+        newEvent.addEventListener("click", () => openOverlayEvent(event));
         newEvent.classList.add("div_event");
+        newEvent.id = "event_"+ event.id;
         newEvent.innerHTML = `
         <div class="div_event_picture">
                 <img class="img_event" src="Pictures/Events/football.jpg">

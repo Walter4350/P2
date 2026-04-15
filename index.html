@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="styles/eventCard.css">
     <link rel="stylesheet" href="styles/createEvent.css">
+    <link rel="stylesheet" href="styles/overlayEvent.css">
 
     <script src="Scripts/createEvents.js" defer> </script>
 
@@ -13,13 +14,41 @@
     <title>P2 tests</title>
 </head>
 <body>
-    <div>
-        
+    <div class="div_overlay" id="overlay_event">
+        <div class="div_overlay_event">
+            <div class="div_overlay_event_header">
+                <div class="div_overlay_event_title">
+                    <p class="para_event_title" id="overlay_event_title">
+                    </p>
+                </div>
+                <div class="div_overlay_event_price">
+                    <img class="img_event_icon" src="Pictures/Icons/Tag.svg">
+                    <p class="para_event_overlay_title" id="overlay_event_price">
+                    </p>
+                </div>
+            </div>
+            <div class="div_overlay_event_picture">
+                <img class="img_event_overlay" src="Pictures/Events/football.jpg">
+            </div>
+            <div class="div_overlay_event_location">
+                <img class="img_event_icon" src="Pictures/Icons/Pin.svg">
+                <p class="para_event_overlay_title" id="overlay_event_location">
+                </p>
+            </div>
+            <div class="div_overlay_event_description">
+                <p class="para_event_overlay_title" id="overlay_event_description">
+                </p>
+            </div>
+            <div class="div_overlay_event_button">
+                <button class="button_event_attend" id="button_event_attend">Attend Event</button>
+                <button class="button_event_create_close" id="button_overlay_event_close">Close</button>
+            </div>
+        </div>
     </div>
 
     <button class="button_event_create" id="button_overlay_create_event_open">Create Event</button>
 
-    <div class="div_overlay_create_event" id="overlay_create_event">
+    <div class="div_overlay" id="overlay_create_event">
         <div class="div_input_event">
             <div class="div_input_event_info">
                 <div class="div_input_event_inputrow">
