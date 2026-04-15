@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="styles/eventCard.css">
+    <link rel="stylesheet" href="styles/createEvent.css">
+
+    <script src="Scripts/createEvents.js" defer> </script>
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>P2 tests</title>
+</head>
+<body>
+    <div>
+        
+    </div>
+
+    <button class="button_event_create" id="button_overlay_create_event_open">Create Event</button>
+
+    <div class="div_overlay_create_event" id="overlay_create_event">
+        <div class="div_input_event">
+            <div class="div_input_event_info">
+                <div class="div_input_event_inputrow">
+                    <div class="div_input_event_top">
+                       <div class="div_input_event_icon">
+                            <img class="img_event_icon" src="Pictures/Icons/Title.svg">
+                        </div>
+                        <div class="div_input_event_text">
+                            <p class="para_input_event_text">Title</p>
+                        </div>  
+                    </div>
+                    <input placeholder="Title" class="input_input_event_input" id="input_event_create_title">
+                </div>
+                <div class="div_input_event_inputrow">
+                    <div class="div_input_event_top">
+                       <div class="div_input_event_icon">
+                            <img class="img_event_icon" src="Pictures/Icons/Tag.svg">
+                        </div>
+                        <div class="div_input_event_text">
+                            <p class="para_input_event_text">Price</p>
+                        </div>  
+                    </div>
+                    <input placeholder="Price" class="input_input_event_input" id="input_event_create_price">
+                </div>
+                <div class="div_input_event_inputrow">
+                    <div class="div_input_event_top">
+                       <div class="div_input_event_icon">
+                            <img class="img_event_icon" src="Pictures/Icons/Calender.svg">
+                        </div>
+                        <div class="div_input_event_text">
+                            <p class="para_input_event_text">Date</p>
+                        </div>  
+                    </div>
+                    <input placeholder="Date" class="input_input_event_input" id="input_event_create_date">
+                </div>
+                <div class="div_input_event_inputrow">
+                    <div class="div_input_event_top">
+                       <div class="div_input_event_icon">
+                            <img class="img_event_icon" src="Pictures/Icons/Clock.svg">
+                        </div>
+                        <div class="div_input_event_text">
+                            <p class="para_input_event_text">Time</p>
+                        </div>  
+                    </div>
+                    <input placeholder="Time" class="input_input_event_input" id="input_event_create_time">
+                </div>
+                <div class="div_input_event_inputrow">
+                    <div class="div_input_event_top">
+                       <div class="div_input_event_icon">
+                            <img class="img_event_icon" src="Pictures/Icons/Pin.svg">
+                        </div>
+                        <div class="div_input_event_text">
+                            <p class="para_input_event_text">Location</p>
+                        </div>  
+                    </div>
+                    <input placeholder="Location" class="input_input_event_input" id="input_event_create_location">
+                </div>
+                <div class="div_input_event_inputrow">
+                    <div class="div_input_event_top">
+                       <div class="div_input_event_icon">
+                            <img class="img_event_icon" src="Pictures/Icons/List.svg">
+                        </div>
+                        <div class="div_input_event_text">
+                            <p class="para_input_event_text">Category</p>
+                        </div>  
+                    </div>
+                    <select class="select_input_event" id="select_event_create_category">
+                        <option class="option_input_event" value="" disabled selected>Choose category</option>
+                        <option class="option_input_event" value="Sport">Sport</option>
+                        <option class="option_input_event" value="Social">Social</option>
+                        <option class="option_input_event" value="Boardgames">Boardgames</option>
+                    </select>
+                </div>
+            </div>
+            <div class="div_input_event_description">
+                <div class="div_input_event_description_top">
+                    <div class="div_input_event_icon">
+                        <img class="img_event_icon" src="Pictures/Icons/Description.svg">
+                    </div>
+                    <div class="div_input_event_text">
+                        <p class="para_input_event_text">Description</p>
+                    </div>
+                </div>
+                <textarea placeholder="Description" class="textarea_input_event_description" id="textarea_input_event_description"></textarea>
+            </div>
+            <div class="div_input_event_buttons">
+                <button class="button_event_create" id="button_event_create">Create Event</button>
+                <button class="button_event_create_close" id="button_overlay_create_event_close">Close</button>
+            </div>
+        </div>
+    </div>
+    <p>
+        Dette er et eksemple på hvordan et event ser ud.
+    </p>
+    <div class="div_event">
+        <div class="div_event_picture">
+            <img class="img_event" src="Pictures/Events/football.jpg">
+        </div>
+        <div class="div_event_info">
+            <div class="div_event_title">
+                <p class="para_event_title">
+                    Football Training
+                </p>
+            </div>
+            <div class="div_event_categories">
+                <div class="div_event_category_Sport">
+                    <p class="para_event_category">
+                        Sport
+                    </p>
+                </div>
+                <div class="div_event_category_Social">
+                    <p class="para_event_category">
+                        Social
+                    </p>
+                </div>
+                <div class="div_event_category_Boardgames">
+                    <p class="para_event_category">
+                        Boardgames
+                    </p>
+                </div>
+            </div>
+            <div class="div_event_additionalinfo">
+                <div class="div_event_date">
+                    <div class="div_event_icon">
+                        <img class="img_event_icon" src="Pictures/Icons/Calender.svg">
+                    </div>
+                    <div class="div_event_text">
+                        <p class="para_event_text">
+                            19/03/2026
+                        </p>
+                    </div>
+                </div>
+                <div class="div_event_time">
+                    <div class="div_event_icon">
+                        <img class="img_event_icon" src="Pictures/Icons/Clock.svg">
+                    </div>
+                    <div class="div_event_text">
+                        <p class="para_event_text">
+                            16:00
+                        </p>
+                    </div>
+                </div>
+                <div class="div_event_attendees">
+                    <div class="div_event_icon">
+                        <img class="img_event_icon" src="Pictures/Icons/User.svg">
+                    </div>
+                    <div class="div_event_text">
+                        <p class="para_event_text">
+                            16 Attendees
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="event_list">
+        <p>Event list</p>
+    </div>
+</body>
+</html>
