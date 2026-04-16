@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="styles/eventCard.css">
     <link rel="stylesheet" href="styles/createEvent.css">
     <link rel="stylesheet" href="styles/overlayEvent.css">
+    <link rel="stylesheet" href="styles/frontpage.css">
 
     <script src="Scripts/createEvents.js" defer> </script>
 
@@ -45,8 +46,6 @@
             </div>
         </div>
     </div>
-
-    <button class="button_event_create" id="button_overlay_create_event_open">Create Event</button>
 
     <div class="div_overlay" id="overlay_create_event">
         <div class="div_input_event">
@@ -140,72 +139,97 @@
             </div>
         </div>
     </div>
-    <p>
-        Dette er et eksemple på hvordan et event ser ud.
-    </p>
-    <div class="div_event">
-        <div class="div_event_picture">
-            <img class="img_event" src="Pictures/Events/football.jpg">
-        </div>
-        <div class="div_event_info">
-            <div class="div_event_title">
-                <p class="para_event_title">
-                    Football Training
-                </p>
-            </div>
-            <div class="div_event_categories">
-                <div class="div_event_category_Sport">
-                    <p class="para_event_category">
-                        Sport
-                    </p>
-                </div>
-                <div class="div_event_category_Social">
-                    <p class="para_event_category">
-                        Social
-                    </p>
-                </div>
-                <div class="div_event_category_Boardgames">
-                    <p class="para_event_category">
-                        Boardgames
-                    </p>
-                </div>
-            </div>
-            <div class="div_event_additionalinfo">
-                <div class="div_event_date">
-                    <div class="div_event_icon">
-                        <img class="img_event_icon" src="Pictures/Icons/Calender.svg">
-                    </div>
-                    <div class="div_event_text">
-                        <p class="para_event_text">
-                            19/03/2026
-                        </p>
-                    </div>
-                </div>
-                <div class="div_event_time">
-                    <div class="div_event_icon">
-                        <img class="img_event_icon" src="Pictures/Icons/Clock.svg">
-                    </div>
-                    <div class="div_event_text">
-                        <p class="para_event_text">
-                            16:00
-                        </p>
-                    </div>
-                </div>
-                <div class="div_event_attendees">
-                    <div class="div_event_icon">
-                        <img class="img_event_icon" src="Pictures/Icons/User.svg">
-                    </div>
-                    <div class="div_event_text">
-                        <p class="para_event_text">
-                            16 Attendees
-                        </p>
-                    </div>
-                </div>
+
+    <header class="header_frontpage">
+        <div class="header_frontpage_beam">
+            <img class="img_header_frontpage" src="Pictures/Icons/logo_frontpage.svg">
+            <div class="header_frontpage_beam_buttons">
+                <button class="button_header_create_event" id="button_overlay_create_event_open">Create Event</button>
+                <button class="button_header_login" id="button_overlay_login">Login</button>
             </div>
         </div>
+    </header>
+
+    <main class="main">
+        <div class="main_left">
+            <div class="div_organisations">
+                Der skal være noget her
+            </div>
+        </div>
+        <div class="main_event" id="event_list">
+            Dette event er et eksempel og forsvinder når man opretter et event.
+            <div class="div_event">
+                <div class="div_event_picture">
+                    <img class="img_event" src="Pictures/Events/football.jpg">
+                </div>
+                <div class="div_event_info">
+                    <div class="div_event_title">
+                        <p class="para_event_title">
+                            Football Training
+                        </p>
+                    </div>
+                    <div class="div_event_categories">
+                        <div class="div_event_category_Sport">
+                            <p class="para_event_category">
+                                Sport
+                            </p>
+                        </div>
+                        <div class="div_event_category_Social">
+                            <p class="para_event_category">
+                                Social
+                            </p>
+                        </div>
+                        <div class="div_event_category_Boardgames">
+                            <p class="para_event_category">
+                                Boardgames
+                            </p>
+                        </div>
+                    </div>
+                    <div class="div_event_additionalinfo">
+                        <div class="div_event_date">
+                            <div class="div_event_icon">
+                                <img class="img_event_icon" src="Pictures/Icons/Calender.svg">
+                            </div>
+                            <div class="div_event_text">
+                                <p class="para_event_text">
+                                    19/03/2026
+                                </p>
+                            </div>
+                        </div>
+                        <div class="div_event_time">
+                            <div class="div_event_icon">
+                                <img class="img_event_icon" src="Pictures/Icons/Clock.svg">
+                            </div>
+                            <div class="div_event_text">
+                                <p class="para_event_text">
+                                    16:00
+                                </p>
+                            </div>
+                        </div>
+                        <div class="div_event_attendees">
+                            <div class="div_event_icon">
+                                <img class="img_event_icon" src="Pictures/Icons/User.svg">
+                            </div>
+                            <div class="div_event_text">
+                                <p class="para_event_text">
+                                    16 Attendees
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div class="main_right">
+            <div class="div_sorting">
+                Der skal være noget her
+            </div>
+        </div>
+    </main>
+
+    <div class="main_footer">
+        <img class="main_footer_img" src="Pictures/Icons/Footer.svg">
     </div>
-    <div id="event_list">
-        <p>Event list</p>
-    </div>
+   
 </body>
 </html>
