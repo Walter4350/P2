@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="div_overlay_event_picture">
-                <img class="img_event_overlay" src="Pictures/Events/football.jpg">
+                <img class="img_event_overlay" id="img_event_overlay">
             </div>
             <div class="div_overlay_event_location">
                 <img class="img_event_icon" src="Pictures/Icons/Pin.svg">
@@ -111,10 +111,37 @@
                             <img class="img_event_icon" src="Pictures/Icons/List.svg">
                         </div>
                         <div class="div_input_event_text">
-                            <p class="para_input_event_text">Category</p>
+                            <p class="para_input_event_text">First Category</p>
                         </div>  
                     </div>
-                    <select class="select_input_event" id="select_event_create_category">
+                    <select class="select_input_event" id="select_event_create_category_1">
+                        <option class="option_input_event" value="" disabled selected>Choose category</option>
+                        <option class="option_input_event" value="Sport">Sport</option>
+                        <option class="option_input_event" value="Social">Social</option>
+                        <option class="option_input_event" value="Boardgames">Boardgames</option>
+                    </select>
+                </div>
+                <div class="div_input_event_inputrow">
+                    <div class="div_input_event_top">
+                       <div class="div_input_event_icon">
+                            <img class="img_event_icon" src="Pictures/Icons/Image.svg">
+                        </div>
+                        <div class="div_input_event_text">
+                            <p class="para_input_event_text">Upload image</p>
+                        </div>  
+                    </div>
+                    <input type="file" accept="image/*" class="input_input_event_input" id="input_event_create_image">
+                </div>
+                <div class="div_input_event_inputrow">
+                    <div class="div_input_event_top">
+                       <div class="div_input_event_icon">
+                            <img class="img_event_icon" src="Pictures/Icons/List.svg">
+                        </div>
+                        <div class="div_input_event_text">
+                            <p class="para_input_event_text">Second Category</p>
+                        </div>  
+                    </div>
+                    <select class="select_input_event" id="select_event_create_category_2">
                         <option class="option_input_event" value="" disabled selected>Choose category</option>
                         <option class="option_input_event" value="Sport">Sport</option>
                         <option class="option_input_event" value="Social">Social</option>

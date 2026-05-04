@@ -9,7 +9,7 @@
 }
 .div_input_event {
     width: 600px;
-    height: 500px;
+    height: 600px;
     background-color: white;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
     outline-style: solid;
@@ -20,10 +20,10 @@
 }
 .div_input_event_info {
     width: 600px;
-    height: 300px;
+    height: 400px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
 }
 .div_input_event_inputrow {
     width: 300px;

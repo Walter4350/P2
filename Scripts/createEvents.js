@@ -8,13 +8,16 @@ const createEventPrice = document.getElementById("input_event_create_price");
 const createEventDate = document.getElementById("input_event_create_date");
 const createEventTime = document.getElementById("input_event_create_time");
 const createEventLocation = document.getElementById("input_event_create_location");
-const createEventCategory = document.getElementById("select_event_create_category");
+const createEventCategory1 = document.getElementById("select_event_create_category_1");
+const createEventCategory2 = document.getElementById("select_event_create_category_2");
 const createEventDescription = document.getElementById("textarea_input_event_description");
+const createEventImage = document.getElementById("input_event_create_image");
 
 const overlayEventTitle = document.getElementById("overlay_event_title");
 const overlayEventPrice = document.getElementById("overlay_event_price");
 const overlayEventLocation = document.getElementById("overlay_event_location");
 const overlayEventDescription = document.getElementById("overlay_event_description");
+const overlayEventImage = document.getElementById("img_event_overlay");
 
 const buttonOverlayCreateEventOpen = document.getElementById("button_overlay_create_event_open");
 const buttonOverlayCreateEventClose = document.getElementById("button_overlay_create_event_close");
@@ -41,6 +44,7 @@ function openOverlayEvent(event) {
     overlayEventPrice.textContent = event.price;
     overlayEventLocation.textContent = event.location;
     overlayEventDescription.textContent = event.description;
+    overlayEventImage.src = event.image;
 
     overlayEvent.style.display = "flex";
 }
@@ -51,6 +55,10 @@ function closeOverlayEvent() {
 
 let eventArray = [];
 function createEvent() {
+    let imageURL = "Pictures/Events/football.jpg";
+    if(createEventImage.files[0]){
+        imageURL = URL.createObjectURL(createEventImage.files[0]);
+    };
     let newEvent = {
         id: eventArray.length,
         title: createEventTitle.value,
@@ -58,8 +66,10 @@ function createEvent() {
         date: createEventDate.value,
         time: createEventTime.value,
         location: createEventLocation.value,
-        category: createEventCategory.value,
+        category1: createEventCategory1.value,
+        category2: createEventCategory2.value,
         description: createEventDescription.value,
+        image: imageURL
     };
     eventArray.push(newEvent);
     displayEvents();
@@ -68,8 +78,10 @@ function createEvent() {
     createEventDate.value = "";
     createEventTime.value = "";
     createEventLocation.value = "";
-    createEventCategory.value = "";
+    createEventCategory1.value = "";
+    createEventCategory2.value = "";
     createEventDescription.value = "";
+    createEventImage.value = "";
     closeOverlayCreateEvent();
 };
 
@@ -82,7 +94,7 @@ function displayEvents() {
         newEvent.id = "event_"+ event.id;
         newEvent.innerHTML = `
         <div class="div_event_picture">
-                <img class="img_event" src="Pictures/Events/football.jpg">
+                <img class="img_event" src="${event.image}">
             </div>
             <div class="div_event_info">
                 <div class="div_event_title">
@@ -91,9 +103,14 @@ function displayEvents() {
                     </p>
                 </div>
                 <div class="div_event_categories">
-                    <div class="${"div_event_category_"+event.category}">
+                    <div class="${"div_event_category_"+event.category1}">
                         <p class="para_event_category">
-                            ${event.category}
+                            ${event.category1}
+                        </p>
+                    </div>
+                    <div class="${"div_event_category_"+event.category2}">
+                        <p class="para_event_category">
+                            ${event.category2}
                         </p>
                     </div>
                 </div>
