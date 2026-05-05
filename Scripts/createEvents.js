@@ -43,18 +43,18 @@ searchEventsInput.addEventListener("input", displayEvents);
 categoryFilterCheckboxes.forEach(checkbox => checkbox.addEventListener("change", displayEvents));
 clearFiltersButton.addEventListener("click", clearFilters);
 
-// Data
+// Data/id
 const currentUserId = getCurrentUserId();
 let selectedOverlayEventId = null;
 let eventArray = addCreatorToOldEvents(loadEvents());
 
-// This variable remembers whether the form is creating a new event or editing an existing one.
-// If it is null, we create a new event. If it contains an id, we update that event instead.
+// Denne variable husker om man er ved at oprette et nyt event eller redigere et allerede eksisterende
+// Hvis det er null, laver vi et nyt event. Hvis det har et id, opdaterer vi det event i stedet. 
 let editingEventId = null;
 
 displayEvents();
 
-// Functions
+// Funktioner
 function openOverlayCreateEvent() {
     overlayCreateEvent.style.display = "flex";
 }
@@ -67,7 +67,7 @@ function closeOverlayCreateEvent() {
 }
 
 function openCreateEventMode() {
-    // When the user clicks "Create Event", the form should always start fresh.
+    // Når en bruger prøver at oprette et event, skal det altid være en ny formular.
     editingEventId = null;
     buttonCreateEvent.textContent = "Create Event";
     clearCreateEventForm();
@@ -83,8 +83,9 @@ function openOverlayEvent(event) {
     overlayEventDescription.textContent = event.description;
     overlayEventImage.src = event.image;
 
-    // Edit and delete should only be possible for the browser/user that created the event.
-    // This is a local prototype solution. Later, a real login/database should decide ownership.
+    
+    // Kun den person som har oprettet event, kan slette eller redigere et event
+    // Detter er en lokal prototype, burde erstatte med en rigtigt login/database senere
     if (event.creatorId === currentUserId) {
         buttonOverlayEventEdit.style.display = "inline-block";
         buttonOverlayEventDelete.style.display = "inline-block";
@@ -109,14 +110,16 @@ function saveEventFromForm() {
     const category1 = normalizeCategory(createEventCategory1.value);
     const category2 = normalizeCategory(createEventCategory2.value);
 
-    // Category 2 is optional. We only require that the user chooses at least one category.
+    
+    // Man skal minimum vælge en kategori for at oprette event
     if (!title || !date || !time || !location || (!category1 && !category2)) {
         alert("Please fill out title, date, time, location and at least one category.");
         return;
     }
 
-    // If the user uploads a picture, we use that picture while the page is open.
-    // If no picture is uploaded, we either keep the old picture when editing or use a default picture when creating.
+   
+    // Hvis brugeren uploader et billede, bruges det billede imens siden er åben
+    // Hvis der ikke uploades et billede, bruges det gamle, eller default billede
     let imageURL = "Pictures/Events/football.jpg";
 
     if (createEventImage.files[0]) {
@@ -128,7 +131,7 @@ function saveEventFromForm() {
     } else {
         const eventWasUpdated = updateExistingEvent(title, date, time, location, category1, category2, imageURL);
 
-        // If the event could not be updated, we stop here so the form does not close.
+        // Hvis event ikke kunne opdateres, stopper det her, så at formen ikke lukker
         if (!eventWasUpdated) {
             return;
         }
@@ -175,8 +178,9 @@ function updateExistingEvent(title, date, time, location, category1, category2, 
     eventToEdit.category2 = category2;
     eventToEdit.description = createEventDescription.value.trim();
 
-    // Only replace the image if the user has selected a new file.
-    // Otherwise the event keeps its old image.
+    
+    // Skifter kun billede, hvis brugeren har valgt en ny fil
+    // Ellers vil event beholde det gamle billede
     if (createEventImage.files[0]) {
         eventToEdit.image = imageURL;
     }
@@ -252,6 +256,7 @@ function displayEvents() {
     }
 }
 
+// Funktion til at redigere sit event
 function editEvent(eventId) {
     const eventToEdit = eventArray.find(event => event.id === eventId);
 
@@ -281,6 +286,7 @@ function editEvent(eventId) {
     openOverlayCreateEvent();
 }
 
+// Funktion til at slette et oprettet event igen, kun den der har lavet event
 function deleteEvent(eventId) {
     const eventToDelete = eventArray.find(event => event.id === eventId);
 
@@ -311,8 +317,10 @@ function editSelectedOverlayEvent() {
         return;
     }
 
-    // We save the id before closing the overlay.
+    
+    // Vi gemmer id før vi lukker overlay
     // closeOverlayEvent() resets selectedOverlayEventId to null, so using it after closing would lose the event id.
+    // Kun personen som har lavet event kan redigerer det, udfra det id som har oprettet event
     const eventIdToEdit = selectedOverlayEventId;
     const eventToEdit = eventArray.find(event => event.id === eventIdToEdit);
 
@@ -365,8 +373,9 @@ function getFilteredEvents() {
         return matchesSearch && matchesCategory;
     });
 
-    // Sort by the actual event date and time instead of when the event was created.
-    // The earliest upcoming date is shown first.
+    
+    // Sorter ud fra hvornår event er, i stedet for hvornår event blev oprettet
+    //Den dato der er tættest på, bliver vist først
     filteredEvents.sort((eventA, eventB) => {
         return getEventDateTime(eventA) - getEventDateTime(eventB);
     });
@@ -393,8 +402,9 @@ function formatEventDate(dateString) {
 }
 
 function getSelectedCategories() {
-    // We normalize the checkbox values so the filter still works even if an older event
-    // was saved with a slightly different spelling, for example "Board Games".
+    
+    // Gør så checkbox værdierne, stadig vil filter, selvom det er et gammelt event
+   // Gemt med en lidt anderledes måde at stave det på, eks. "Board Games"
     return Array.from(categoryFilterCheckboxes)
         .filter(checkbox => checkbox.checked)
         .map(checkbox => normalizeCategory(checkbox.value));
@@ -488,19 +498,21 @@ function clearCreateEventForm() {
     createEventImage.value = "";
 }
 
+// Reset af search input først, så tekst feltet er tomt igen
 function clearFilters() {
-    // Reset the search input first, so the text field becomes empty again.
+    
     if (searchEventsInput) {
         searchEventsInput.value = "";
     }
 
-    // Find the checkboxes fresh from the HTML each time.
-    // This makes the Clear button reliable even if the checkbox list changes later.
+    
+    // Checkbox altid tomme hvergang man åbner
+   // Det gør clear knappen funktionel selvom checkbox listen ændres senere
     document.querySelectorAll(".checkbox_filter_category").forEach(checkbox => {
         checkbox.checked = false;
     });
 
-    // Show the full event list again after all filters have been reset.
+    // Vis alle events igen, efter at man har clearet alle filtre
     displayEvents();
 }
 
