@@ -60,3 +60,34 @@
     align-items: center;
     justify-content: center;
 }
+.button_event_overlay_edit,
+.button_event_overlay_delete {
+    width: 90px;
+    height: 40px;
+    font-size: 12px;
+    color: #211A51;
+    border-radius: 20px;
+    border: 1px solid #211A51;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    margin: 5px;
+}
+
+.button_event_overlay_edit {
+    background-color: #CEC7FF;
+}
+
+.button_event_overlay_delete {
+    background-color: #FFC7C8;
+}
+
+.button_event_overlay_edit:hover,
+.button_event_overlay_delete:hover {
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+.button_event_overlay_edit:active,
+.button_event_overlay_delete:active {
+    transform: none;
+}

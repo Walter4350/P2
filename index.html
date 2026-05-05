@@ -15,6 +15,7 @@
     <title>P2 tests</title>
 </head>
 <body>
+    <button onclick="resetEvents()">Reset events</button>
     <div class="div_overlay" id="overlay_event">
         <div class="div_overlay_event">
             <div class="div_overlay_event_header">
@@ -41,7 +42,8 @@
                 </p>
             </div>
             <div class="div_overlay_event_button">
-                <button class="button_event_attend" id="button_event_attend">Attend Event</button>
+                <button class="button_event_overlay_edit" id="button_overlay_event_edit">Edit</button>
+                <button class="button_event_overlay_delete" id="button_overlay_event_delete">Delete</button>
                 <button class="button_event_create_close" id="button_overlay_event_close">Close</button>
             </div>
         </div>
@@ -81,7 +83,7 @@
                             <p class="para_input_event_text">Date</p>
                         </div>  
                     </div>
-                    <input placeholder="Date" class="input_input_event_input" id="input_event_create_date">
+                    <input type="date" placeholder="Date" class="input_input_event_input" id="input_event_create_date">
                 </div>
                 <div class="div_input_event_inputrow">
                     <div class="div_input_event_top">
@@ -92,7 +94,7 @@
                             <p class="para_input_event_text">Time</p>
                         </div>  
                     </div>
-                    <input placeholder="Time" class="input_input_event_input" id="input_event_create_time">
+                    <input type="time" placeholder="Time" class="input_input_event_input" id="input_event_create_time">
                 </div>
                 <div class="div_input_event_inputrow">
                     <div class="div_input_event_top">
@@ -138,11 +140,11 @@
                             <img class="img_event_icon" src="Pictures/Icons/List.svg">
                         </div>
                         <div class="div_input_event_text">
-                            <p class="para_input_event_text">Second Category</p>
+                            <p class="para_input_event_text">Second Category <span style="font-weight: 400;">(optional)</span></p>
                         </div>  
                     </div>
                     <select class="select_input_event" id="select_event_create_category_2">
-                        <option class="option_input_event" value="" disabled selected>Choose category</option>
+                        <option class="option_input_event" value="" selected>No second category</option>
                         <option class="option_input_event" value="Sport">Sport</option>
                         <option class="option_input_event" value="Social">Social</option>
                         <option class="option_input_event" value="Boardgames">Boardgames</option>
@@ -249,7 +251,30 @@
         </div> 
         <div class="main_right">
             <div class="div_sorting">
-                Der skal være noget her
+                <p class="para_filter_title">Find events</p>
+
+                <label class="label_filter" for="input_search_events">Search</label>
+                <input class="input_filter" id="input_search_events" placeholder="Search title or location">
+
+                <p class="label_filter">Categories</p>
+                <div class="div_filter_checkboxes">
+                    <label class="label_filter_checkbox">
+                        <input class="checkbox_filter_category" id="checkbox_filter_sport" type="checkbox" value="Sport">
+                        Sport
+                    </label>
+                    <label class="label_filter_checkbox">
+                        <input class="checkbox_filter_category" id="checkbox_filter_social" type="checkbox" value="Social">
+                        Social
+                    </label>
+                    <label class="label_filter_checkbox">
+                        <input class="checkbox_filter_category" id="checkbox_filter_boardgames" type="checkbox" value="Boardgames">
+                        Boardgames
+                    </label>
+                </div>
+
+                <p class="para_sort_note">Events are sorted by date.</p>
+
+                <button class="button_clear_filters" id="button_clear_filters" type="button" onclick="clearFilters()">Clear</button>
             </div>
         </div>
     </main>

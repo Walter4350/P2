@@ -132,3 +132,28 @@ p {
     color: #474747;
     font-weight: 300;
 }
+.div_event_buttons_small {
+    margin-left: auto;
+    margin-right: 12px;
+    display: flex;
+    gap: 6px;
+}
+
+.button_event_edit,
+.button_event_delete {
+    border: none;
+    border-radius: 10px;
+    padding: 5px 8px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.button_event_edit {
+    background-color: #CEC7FF;
+    color: #211A51;
+}
+
+.button_event_delete {
+    background-color: #FFC7C8;
+    color: #211A51;
+}
