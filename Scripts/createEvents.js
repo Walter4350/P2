@@ -1,4 +1,3 @@
-// DOM Content Load
 const overlayCreateEvent = document.getElementById("overlay_create_event");
 const overlayEvent = document.getElementById("overlay_event");
 const eventList = document.getElementById("event_list");
@@ -11,7 +10,7 @@ const createEventLocation = document.getElementById("input_event_create_location
 const createEventCategory1 = document.getElementById("select_event_create_category_1");
 const createEventCategory2 = document.getElementById("select_event_create_category_2");
 const createEventDescription = document.getElementById("textarea_input_event_description");
-const createEventImage = document.getElementById("input_event_create_image");
+
 
 const overlayEventTitle = document.getElementById("overlay_event_title");
 const overlayEventPrice = document.getElementById("overlay_event_price");
@@ -26,49 +25,48 @@ const buttonOverlayClose = document.getElementById("button_overlay_event_close")
 const buttonOverlayEventEdit = document.getElementById("button_overlay_event_edit");
 const buttonOverlayEventDelete = document.getElementById("button_overlay_event_delete");
 
-// Filter inputs
 const searchEventsInput = document.getElementById("input_search_events");
 const categoryFilterCheckboxes = document.querySelectorAll(".checkbox_filter_category");
-const clearFiltersButton = document.getElementById("button_clear_filters");
 
-// Event Listeners
+
 buttonOverlayCreateEventOpen.addEventListener("click", openCreateEventMode);
 buttonOverlayCreateEventClose.addEventListener("click", closeOverlayCreateEvent);
 buttonCreateEvent.addEventListener("click", saveEventFromForm);
 buttonOverlayClose.addEventListener("click", closeOverlayEvent);
 buttonOverlayEventEdit.addEventListener("click", editSelectedOverlayEvent);
 buttonOverlayEventDelete.addEventListener("click", deleteSelectedOverlayEvent);
-
 searchEventsInput.addEventListener("input", displayEvents);
 categoryFilterCheckboxes.forEach(checkbox => checkbox.addEventListener("change", displayEvents));
-clearFiltersButton.addEventListener("click", clearFilters);
 
-// Data/id
-const currentUserId = getCurrentUserId();
+// Removes the selected event from the overlay
 let selectedOverlayEventId = null;
-let eventArray = addCreatorToOldEvents(loadEvents());
+let eventArray = loadEvents(); 
 
-// Denne variable husker om man er ved at oprette et nyt event eller redigere et allerede eksisterende
-// Hvis det er null, laver vi et nyt event. Hvis det har et id, opdaterer vi det event i stedet. 
+// Stops editing mode
 let editingEventId = null;
 
 displayEvents();
 
-// Funktioner
 function openOverlayCreateEvent() {
     overlayCreateEvent.style.display = "flex";
 }
 
+// Closes the create/edit event window and resets it
 function closeOverlayCreateEvent() {
+    // Hides the overlay
     overlayCreateEvent.style.display = "none";
+    // Stops editing mode
     editingEventId = null;
+    // Changes the button text back to "Create Event"
     buttonCreateEvent.textContent = "Create Event";
     clearCreateEventForm();
 }
 
 function openCreateEventMode() {
-    // Når en bruger prøver at oprette et event, skal det altid være en ny formular.
+    
+    // Stops editing mode
     editingEventId = null;
+    // Changes the button text back to "Create Event"
     buttonCreateEvent.textContent = "Create Event";
     clearCreateEventForm();
     openOverlayCreateEvent();
@@ -82,70 +80,64 @@ function openOverlayEvent(event) {
     overlayEventLocation.textContent = event.location;
     overlayEventDescription.textContent = event.description;
     overlayEventImage.src = event.image;
-
-    
-    // Kun den person som har oprettet event, kan slette eller redigere et event
-    // Detter er en lokal prototype, burde erstatte med en rigtigt login/database senere
-    if (event.creatorId === currentUserId) {
-        buttonOverlayEventEdit.style.display = "inline-block";
-        buttonOverlayEventDelete.style.display = "inline-block";
-    } else {
-        buttonOverlayEventEdit.style.display = "none";
-        buttonOverlayEventDelete.style.display = "none";
-    }
+    // Show edit and delete buttons for the selected event
+    buttonOverlayEventEdit.style.display = "inline-block";
+    buttonOverlayEventDelete.style.display = "inline-block";
 
     overlayEvent.style.display = "flex";
 }
 
 function closeOverlayEvent() {
     overlayEvent.style.display = "none";
+    // Removes the selected event from the overlay
     selectedOverlayEventId = null;
 }
-
+// Saves the form as either a new event or an edited event
 function saveEventFromForm() {
+    // Gets the title from the form and removes extra spaces
     const title = createEventTitle.value.trim();
+    // Gets the selected date
     const date = createEventDate.value;
+    // Gets the selected time
     const time = createEventTime.value;
+    // Gets the location and removes extra spaces
     const location = createEventLocation.value.trim();
-    const category1 = normalizeCategory(createEventCategory1.value);
-    const category2 = normalizeCategory(createEventCategory2.value);
+    // Gets the first category
+    const category1 = createEventCategory1.value;
+    // Gets the second category
+    const category2 = createEventCategory2.value;
+    // Default picture when creating events
+    const imageURL = "Pictures/Events/football.jpg";
 
     
-    // Man skal minimum vælge en kategori for at oprette event
     if (!title || !date || !time || !location || (!category1 && !category2)) {
         alert("Please fill out title, date, time, location and at least one category.");
         return;
     }
-
-   
-    // Hvis brugeren uploader et billede, bruges det billede imens siden er åben
-    // Hvis der ikke uploades et billede, bruges det gamle, eller default billede
-    let imageURL = "Pictures/Events/football.jpg";
-
-    if (createEventImage.files[0]) {
-        imageURL = URL.createObjectURL(createEventImage.files[0]);
-    }
-
+    
     if (editingEventId === null) {
         createNewEvent(title, date, time, location, category1, category2, imageURL);
     } else {
         const eventWasUpdated = updateExistingEvent(title, date, time, location, category1, category2, imageURL);
 
-        // Hvis event ikke kunne opdateres, stopper det her, så at formen ikke lukker
         if (!eventWasUpdated) {
             return;
         }
     }
 
+    // Saves the updated event list
     saveEvents();
     displayEvents();
     closeOverlayCreateEvent();
 }
-
+// Creates a new event object and adds it to the event list
 function createNewEvent(title, date, time, location, category1, category2, imageURL) {
+    // Creates the object that stores all information about the event
     let newEvent = {
+        // Gives the event a unique ID based on the current time
         id: Date.now(),
         title: title,
+        // Uses "Free" if the price field is empty
         price: createEventPrice.value.trim() || "Free",
         date: date,
         time: time,
@@ -154,16 +146,15 @@ function createNewEvent(title, date, time, location, category1, category2, image
         category2: category2,
         description: createEventDescription.value.trim(),
         image: imageURL,
-        createdAt: Date.now(),
-        creatorId: currentUserId
+       
     };
 
-    eventArray.push(newEvent);
+    // Adds the new event to the list
+        eventArray.push(newEvent);
 }
-
 function updateExistingEvent(title, date, time, location, category1, category2, imageURL) {
-    const eventToEdit = eventArray.find(event => event.id === editingEventId);
-
+    // Finds the event that should be edited
+        const eventToEdit = eventArray.find(event => event.id === editingEventId);
     if (!eventToEdit) {
         alert("The event could not be found.");
         return false;
@@ -177,16 +168,10 @@ function updateExistingEvent(title, date, time, location, category1, category2, 
     eventToEdit.category1 = category1;
     eventToEdit.category2 = category2;
     eventToEdit.description = createEventDescription.value.trim();
+    eventToEdit.image = imageURL;
 
-    
-    // Skifter kun billede, hvis brugeren har valgt en ny fil
-    // Ellers vil event beholde det gamle billede
-    if (createEventImage.files[0]) {
-        eventToEdit.image = imageURL;
+        return true;
     }
-
-    return true;
-}
 
 function displayEvents() {
     eventList.innerHTML = "";
@@ -256,17 +241,12 @@ function displayEvents() {
     }
 }
 
-// Funktion til at redigere sit event
+// Opens an existing event in the form so it can be changed
 function editEvent(eventId) {
     const eventToEdit = eventArray.find(event => event.id === eventId);
 
     if (!eventToEdit) {
         alert("The event could not be found.");
-        return;
-    }
-
-    if (eventToEdit.creatorId !== currentUserId) {
-        alert("Only the person who created this event can edit it.");
         return;
     }
 
@@ -280,23 +260,18 @@ function editEvent(eventId) {
     createEventCategory1.value = eventToEdit.category1;
     createEventCategory2.value = eventToEdit.category2 || "";
     createEventDescription.value = eventToEdit.description;
-    createEventImage.value = "";
-
+   
+    // Changes the button text because the user is editing now
     buttonCreateEvent.textContent = "Save Changes";
     openOverlayCreateEvent();
 }
 
-// Funktion til at slette et oprettet event igen, kun den der har lavet event
+// Deletes an event from the event list
 function deleteEvent(eventId) {
     const eventToDelete = eventArray.find(event => event.id === eventId);
 
     if (!eventToDelete) {
         alert("The event could not be found.");
-        return;
-    }
-
-    if (eventToDelete.creatorId !== currentUserId) {
-        alert("Only the person who created this event can delete it.");
         return;
     }
 
@@ -306,42 +281,39 @@ function deleteEvent(eventId) {
         return;
     }
 
+    // Keeps every event except the one with the matching ID
     eventArray = eventArray.filter(event => event.id !== eventId);
+    // Saves the updated event list
     saveEvents();
     displayEvents();
     closeOverlayEvent();
 }
-
+// Starts editing the event that is selected in the overlay
 function editSelectedOverlayEvent() {
+    // If no event is selected, stop the function
     if (selectedOverlayEventId === null) {
         return;
     }
-
-    
-    // Vi gemmer id før vi lukker overlay
-    // closeOverlayEvent() resets selectedOverlayEventId to null, so using it after closing would lose the event id.
-    // Kun personen som har lavet event kan redigerer det, udfra det id som har oprettet event
+    // Save the selected event ID in a clearer variable name
     const eventIdToEdit = selectedOverlayEventId;
-    const eventToEdit = eventArray.find(event => event.id === eventIdToEdit);
-
-    if (!eventToEdit || eventToEdit.creatorId !== currentUserId) {
-        alert("Only the person who created this event can edit it.");
-        return;
-    }
+    
 
     closeOverlayEvent();
+    // Open the selected event in edit mode
     editEvent(eventIdToEdit);
 }
 
 function deleteSelectedOverlayEvent() {
+    // If no event is selected, stop the function
     if (selectedOverlayEventId === null) {
         return;
     }
 
     deleteEvent(selectedOverlayEventId);
 }
-
+// Creates the small category label shown on each event card
 function createCategoryHTML(category) {
+    // If there is no category, show nothing
     if (!category) {
         return "";
     }
@@ -354,151 +326,101 @@ function createCategoryHTML(category) {
         </div>
     `;
 }
-
+// Finds the events that should be shown after search and category filtering
 function getFilteredEvents() {
+    // Gets the search text and makes it lowercase so the search is easier to match
     const searchText = searchEventsInput.value.toLowerCase().trim();
+    // Gets the categories the user has selected
     const selectedCategories = getSelectedCategories();
 
+    // Goes through each event and keeps only the ones that match
     let filteredEvents = eventArray.filter(event => {
         const matchesSearch =
             event.title.toLowerCase().includes(searchText) ||
             event.location.toLowerCase().includes(searchText);
 
-        const eventCategories = [normalizeCategory(event.category1), normalizeCategory(event.category2)];
+        const eventCategories = [event.category1, event.category2];
 
         const matchesCategory =
             selectedCategories.length === 0 ||
             selectedCategories.some(category => eventCategories.includes(category));
 
+        // The event is shown only if it matches both search and category filters
         return matchesSearch && matchesCategory;
     });
 
     
-    // Sorter ud fra hvornår event er, i stedet for hvornår event blev oprettet
-    //Den dato der er tættest på, bliver vist først
+    // Sorts events so the earliest event is shown first
     filteredEvents.sort((eventA, eventB) => {
         return getEventDateTime(eventA) - getEventDateTime(eventB);
     });
 
     return filteredEvents;
 }
-
+// Converts an event date and time into a number, so events can be sorted by time
 function getEventDateTime(event) {
-    return new Date(`${event.date}T${event.time || "00:00"}`).getTime();
-}
+    return new Date(`${event.date}T${event.time}`).getTime(); // millisekunder siden 1970
 
+}
+// Changes the date from YYYY-MM-DD to DD/MM/YYYY, so it is easier to read
 function formatEventDate(dateString) {
+    // If there is no date, return empty text
     if (!dateString) {
         return "";
     }
-
+    // Splits the date into year, month and day
     const dateParts = dateString.split("-");
-
     if (dateParts.length !== 3) {
         return dateString;
     }
-
     return `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
 }
 
 function getSelectedCategories() {
     
-    // Gør så checkbox værdierne, stadig vil filter, selvom det er et gammelt event
-   // Gemt med en lidt anderledes måde at stave det på, eks. "Board Games"
     return Array.from(categoryFilterCheckboxes)
         .filter(checkbox => checkbox.checked)
-        .map(checkbox => normalizeCategory(checkbox.value));
+        .map(checkbox => checkbox.value);
 }
 
-function normalizeCategory(category) {
-    if (!category) {
-        return "";
-    }
-
-    const categoryText = category.toString().trim().toLowerCase().replace(/\s+/g, "");
-
-    if (categoryText === "sport") {
-        return "Sport";
-    }
-
-    if (categoryText === "social") {
-        return "Social";
-    }
-
-    if (categoryText === "boardgames" || categoryText === "boardgame") {
-        return "Boardgames";
-    }
-
-    return category;
-}
-
+// Saves the event list in the browser, so events are not lost when the page refreshes
 function saveEvents() {
+    // Converts eventArray to text and saves it under the name "events"
     localStorage.setItem("events", JSON.stringify(eventArray));
 }
-
+// Loads events that were saved earlier in the browser
 function loadEvents() {
+    // Tries to get saved events from localStorage
     const savedEvents = localStorage.getItem("events");
 
+    // If saved events exist, convert them from text back into an array
     if (savedEvents) {
         return JSON.parse(savedEvents);
     }
 
-    return [];
-}
-
-function getCurrentUserId() {
-    let storedUserId = localStorage.getItem("currentUserId");
-
-    if (!storedUserId) {
-        storedUserId = "user_" + Date.now();
-        localStorage.setItem("currentUserId", storedUserId);
-    }
-
-    return storedUserId;
-}
-
-function addCreatorToOldEvents(events) {
-    let hasChangedOldEvents = false;
-
-    const eventsWithCreator = events.map(event => {
-        const normalizedCategory1 = normalizeCategory(event.category1);
-        const normalizedCategory2 = normalizeCategory(event.category2);
-        const needsCreator = !event.creatorId;
-        const needsCategoryFix = event.category1 !== normalizedCategory1 || event.category2 !== normalizedCategory2;
-
-        if (needsCreator || needsCategoryFix) {
-            hasChangedOldEvents = true;
-            return {
-                ...event,
-                category1: normalizedCategory1,
-                category2: normalizedCategory2,
-                creatorId: event.creatorId || currentUserId
-            };
-        }
-
-        return event;
-    });
-
-    if (hasChangedOldEvents) {
-        localStorage.setItem("events", JSON.stringify(eventsWithCreator));
-    }
-
-    return eventsWithCreator;
-}
-
+    // If there are no saved events, start with an empty array
+    return [];}
+// Clears the form, so it is ready for a new event next time
 function clearCreateEventForm() {
+    // Clears the title field
     createEventTitle.value = "";
+    // Clears the price field
     createEventPrice.value = "";
+    // Clears the date field
     createEventDate.value = "";
+    // Clears the time field
     createEventTime.value = "";
+    // Clears the location field
     createEventLocation.value = "";
+    // Clears the first category field
     createEventCategory1.value = "";
+    // Clears the second category field
     createEventCategory2.value = "";
+    // Clears the description field
     createEventDescription.value = "";
-    createEventImage.value = "";
+   
 }
-
-// Reset af search input først, så tekst feltet er tomt igen
+// Clear the search function so its blank again
 function clearFilters() {
     
     if (searchEventsInput) {
@@ -506,17 +428,9 @@ function clearFilters() {
     }
 
     
-    // Checkbox altid tomme hvergang man åbner
-   // Det gør clear knappen funktionel selvom checkbox listen ændres senere
     document.querySelectorAll(".checkbox_filter_category").forEach(checkbox => {
         checkbox.checked = false;
     });
 
-    // Vis alle events igen, efter at man har clearet alle filtre
     displayEvents();
-}
-
-function resetEvents() {
-    localStorage.removeItem("events");
-    location.reload();
-}
+} 
