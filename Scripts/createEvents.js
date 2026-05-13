@@ -6,41 +6,66 @@ const createEventTitle = document.getElementById("input_event_create_title");
 const createEventPrice = document.getElementById("input_event_create_price");
 const createEventDate = document.getElementById("input_event_create_date");
 const createEventTime = document.getElementById("input_event_create_time");
-const createEventLocation = document.getElementById("input_event_create_location");
-const createEventCategory1 = document.getElementById("select_event_create_category_1");
-const createEventCategory2 = document.getElementById("select_event_create_category_2");
-const createEventDescription = document.getElementById("textarea_input_event_description");
-
+const createEventLocation = document.getElementById(
+    "input_event_create_location",
+);
+const createEventCategory1 = document.getElementById(
+    "select_event_create_category_1",
+);
+const createEventCategory2 = document.getElementById(
+    "select_event_create_category_2",
+);
+const createEventDescription = document.getElementById(
+    "textarea_input_event_description",
+);
 
 const overlayEventTitle = document.getElementById("overlay_event_title");
 const overlayEventPrice = document.getElementById("overlay_event_price");
 const overlayEventLocation = document.getElementById("overlay_event_location");
-const overlayEventDescription = document.getElementById("overlay_event_description");
+const overlayEventDescription = document.getElementById(
+    "overlay_event_description",
+);
 const overlayEventImage = document.getElementById("img_event_overlay");
 
-const buttonOverlayCreateEventOpen = document.getElementById("button_overlay_create_event_open");
-const buttonOverlayCreateEventClose = document.getElementById("button_overlay_create_event_close");
+const buttonOverlayCreateEventOpen = document.getElementById(
+    "button_overlay_create_event_open",
+);
+const buttonOverlayCreateEventClose = document.getElementById(
+    "button_overlay_create_event_close",
+);
 const buttonCreateEvent = document.getElementById("button_event_create");
-const buttonOverlayClose = document.getElementById("button_overlay_event_close");
-const buttonOverlayEventEdit = document.getElementById("button_overlay_event_edit");
-const buttonOverlayEventDelete = document.getElementById("button_overlay_event_delete");
+const buttonOverlayClose = document.getElementById(
+    "button_overlay_event_close",
+);
+const buttonOverlayEventEdit = document.getElementById(
+    "button_overlay_event_edit",
+);
+const buttonOverlayEventDelete = document.getElementById(
+    "button_overlay_event_delete",
+);
 
 const searchEventsInput = document.getElementById("input_search_events");
-const categoryFilterCheckboxes = document.querySelectorAll(".checkbox_filter_category");
-
+const categoryFilterCheckboxes = document.querySelectorAll(
+    ".checkbox_filter_category",
+);
 
 buttonOverlayCreateEventOpen.addEventListener("click", openCreateEventMode);
-buttonOverlayCreateEventClose.addEventListener("click", closeOverlayCreateEvent);
+buttonOverlayCreateEventClose.addEventListener(
+    "click",
+    closeOverlayCreateEvent,
+);
 buttonCreateEvent.addEventListener("click", saveEventFromForm);
 buttonOverlayClose.addEventListener("click", closeOverlayEvent);
 buttonOverlayEventEdit.addEventListener("click", editSelectedOverlayEvent);
 buttonOverlayEventDelete.addEventListener("click", deleteSelectedOverlayEvent);
 searchEventsInput.addEventListener("input", displayEvents);
-categoryFilterCheckboxes.forEach(checkbox => checkbox.addEventListener("change", displayEvents));
+categoryFilterCheckboxes.forEach((checkbox) =>
+    checkbox.addEventListener("change", displayEvents),
+);
 
 // Removes the selected event from the overlay
 let selectedOverlayEventId = null;
-let eventArray = loadEvents(); 
+let eventArray = loadEvents();
 
 // Stops editing mode
 let editingEventId = null;
@@ -63,7 +88,7 @@ function closeOverlayCreateEvent() {
 }
 
 function openCreateEventMode() {
-    
+    if (!userIsAdmin()) return;
     // Stops editing mode
     editingEventId = null;
     // Changes the button text back to "Create Event"
@@ -80,9 +105,10 @@ function openOverlayEvent(event) {
     overlayEventLocation.textContent = event.location;
     overlayEventDescription.textContent = event.description;
     overlayEventImage.src = event.image;
-    // Show edit and delete buttons for the selected event
-    buttonOverlayEventEdit.style.display = "inline-block";
-    buttonOverlayEventDelete.style.display = "inline-block";
+    // Show edit and delete buttons only for admins
+    const isAdmin = typeof userIsAdmin === "function" && userIsAdmin();
+    buttonOverlayEventEdit.style.display = isAdmin ? "inline-block" : "none";
+    buttonOverlayEventDelete.style.display = isAdmin ? "inline-block" : "none";
 
     overlayEvent.style.display = "flex";
 }
@@ -109,16 +135,33 @@ function saveEventFromForm() {
     // Default picture when creating events
     const imageURL = "Pictures/Events/football.jpg";
 
-    
     if (!title || !date || !time || !location || (!category1 && !category2)) {
-        alert("Please fill out title, date, time, location and at least one category.");
+        alert(
+            "Please fill out title, date, time, location and at least one category.",
+        );
         return;
     }
-    
+
     if (editingEventId === null) {
-        createNewEvent(title, date, time, location, category1, category2, imageURL);
+        createNewEvent(
+            title,
+            date,
+            time,
+            location,
+            category1,
+            category2,
+            imageURL,
+        );
     } else {
-        const eventWasUpdated = updateExistingEvent(title, date, time, location, category1, category2, imageURL);
+        const eventWasUpdated = updateExistingEvent(
+            title,
+            date,
+            time,
+            location,
+            category1,
+            category2,
+            imageURL,
+        );
 
         if (!eventWasUpdated) {
             return;
@@ -131,7 +174,15 @@ function saveEventFromForm() {
     closeOverlayCreateEvent();
 }
 // Creates a new event object and adds it to the event list
-function createNewEvent(title, date, time, location, category1, category2, imageURL) {
+function createNewEvent(
+    title,
+    date,
+    time,
+    location,
+    category1,
+    category2,
+    imageURL,
+) {
     // Creates the object that stores all information about the event
     let newEvent = {
         // Gives the event a unique ID based on the current time
@@ -146,15 +197,22 @@ function createNewEvent(title, date, time, location, category1, category2, image
         category2: category2,
         description: createEventDescription.value.trim(),
         image: imageURL,
-       
     };
 
     // Adds the new event to the list
-        eventArray.push(newEvent);
+    eventArray.push(newEvent);
 }
-function updateExistingEvent(title, date, time, location, category1, category2, imageURL) {
+function updateExistingEvent(
+    title,
+    date,
+    time,
+    location,
+    category1,
+    category2,
+    imageURL,
+) {
     // Finds the event that should be edited
-        const eventToEdit = eventArray.find(event => event.id === editingEventId);
+    const eventToEdit = eventArray.find((event) => event.id === editingEventId);
     if (!eventToEdit) {
         alert("The event could not be found.");
         return false;
@@ -170,8 +228,8 @@ function updateExistingEvent(title, date, time, location, category1, category2, 
     eventToEdit.description = createEventDescription.value.trim();
     eventToEdit.image = imageURL;
 
-        return true;
-    }
+    return true;
+}
 
 function displayEvents() {
     eventList.innerHTML = "";
@@ -243,7 +301,8 @@ function displayEvents() {
 
 // Opens an existing event in the form so it can be changed
 function editEvent(eventId) {
-    const eventToEdit = eventArray.find(event => event.id === eventId);
+    if (!userIsAdmin()) return;
+    const eventToEdit = eventArray.find((event) => event.id === eventId);
 
     if (!eventToEdit) {
         alert("The event could not be found.");
@@ -253,14 +312,15 @@ function editEvent(eventId) {
     editingEventId = eventId;
 
     createEventTitle.value = eventToEdit.title;
-    createEventPrice.value = eventToEdit.price === "Free" ? "" : eventToEdit.price;
+    createEventPrice.value =
+        eventToEdit.price === "Free" ? "" : eventToEdit.price;
     createEventDate.value = eventToEdit.date;
     createEventTime.value = eventToEdit.time;
     createEventLocation.value = eventToEdit.location;
     createEventCategory1.value = eventToEdit.category1;
     createEventCategory2.value = eventToEdit.category2 || "";
     createEventDescription.value = eventToEdit.description;
-   
+
     // Changes the button text because the user is editing now
     buttonCreateEvent.textContent = "Save Changes";
     openOverlayCreateEvent();
@@ -268,7 +328,8 @@ function editEvent(eventId) {
 
 // Deletes an event from the event list
 function deleteEvent(eventId) {
-    const eventToDelete = eventArray.find(event => event.id === eventId);
+    if (!userIsAdmin()) return;
+    const eventToDelete = eventArray.find((event) => event.id === eventId);
 
     if (!eventToDelete) {
         alert("The event could not be found.");
@@ -282,7 +343,7 @@ function deleteEvent(eventId) {
     }
 
     // Keeps every event except the one with the matching ID
-    eventArray = eventArray.filter(event => event.id !== eventId);
+    eventArray = eventArray.filter((event) => event.id !== eventId);
     // Saves the updated event list
     saveEvents();
     displayEvents();
@@ -296,7 +357,6 @@ function editSelectedOverlayEvent() {
     }
     // Save the selected event ID in a clearer variable name
     const eventIdToEdit = selectedOverlayEventId;
-    
 
     closeOverlayEvent();
     // Open the selected event in edit mode
@@ -334,7 +394,7 @@ function getFilteredEvents() {
     const selectedCategories = getSelectedCategories();
 
     // Goes through each event and keeps only the ones that match
-    let filteredEvents = eventArray.filter(event => {
+    let filteredEvents = eventArray.filter((event) => {
         const matchesSearch =
             event.title.toLowerCase().includes(searchText) ||
             event.location.toLowerCase().includes(searchText);
@@ -343,13 +403,14 @@ function getFilteredEvents() {
 
         const matchesCategory =
             selectedCategories.length === 0 ||
-            selectedCategories.some(category => eventCategories.includes(category));
+            selectedCategories.some((category) =>
+                eventCategories.includes(category),
+            );
 
         // The event is shown only if it matches both search and category filters
         return matchesSearch && matchesCategory;
     });
 
-    
     // Sorts events so the earliest event is shown first
     filteredEvents.sort((eventA, eventB) => {
         return getEventDateTime(eventA) - getEventDateTime(eventB);
@@ -360,7 +421,6 @@ function getFilteredEvents() {
 // Converts an event date and time into a number, so events can be sorted by time
 function getEventDateTime(event) {
     return new Date(`${event.date}T${event.time}`).getTime(); // millisekunder siden 1970
-
 }
 // Changes the date from YYYY-MM-DD to DD/MM/YYYY, so it is easier to read
 function formatEventDate(dateString) {
@@ -377,10 +437,9 @@ function formatEventDate(dateString) {
 }
 
 function getSelectedCategories() {
-    
     return Array.from(categoryFilterCheckboxes)
-        .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.value);
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => checkbox.value);
 }
 
 // Saves the event list in the browser, so events are not lost when the page refreshes
@@ -399,7 +458,8 @@ function loadEvents() {
     }
 
     // If there are no saved events, start with an empty array
-    return [];}
+    return [];
+}
 // Clears the form, so it is ready for a new event next time
 function clearCreateEventForm() {
     // Clears the title field
@@ -418,19 +478,18 @@ function clearCreateEventForm() {
     createEventCategory2.value = "";
     // Clears the description field
     createEventDescription.value = "";
-   
 }
 // Clear the search function so its blank again
 function clearFilters() {
-    
     if (searchEventsInput) {
         searchEventsInput.value = "";
     }
 
-    
-    document.querySelectorAll(".checkbox_filter_category").forEach(checkbox => {
-        checkbox.checked = false;
-    });
+    document
+        .querySelectorAll(".checkbox_filter_category")
+        .forEach((checkbox) => {
+            checkbox.checked = false;
+        });
 
     displayEvents();
-} 
+}

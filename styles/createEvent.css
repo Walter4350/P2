@@ -14,7 +14,7 @@
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
     outline-style: solid;
     outline-width: 2px;
-    border-color: #211A51;
+    border-color: #211a51;
     border-radius: 20px;
     margin: 10px;
 }
@@ -46,7 +46,7 @@
     width: 225px;
     height: 50px;
     display: flex;
-    align-items: center;         
+    align-items: center;
 }
 .div_input_event_description {
     width: 600px;
@@ -65,7 +65,7 @@
     font-size: 14px;
     border-style: solid;
 }
-.para_input_event_text{
+.para_input_event_text {
     text-align: left;
     font-size: 16px;
 }
@@ -96,13 +96,96 @@
     border-style: solid;
     border-width: 2px;
 }
-.button_event_create_close {  
+.button_event_create_close {
     color: white;
-    background-color: #211A51;
+    background-color: #211a51;
 }
 .div_input_event_buttons {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
+}
+/* ── Login overlay ── */
+.div_login {
+    width: 360px;
+    background-color: white;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+    outline-style: solid;
+    outline-width: 2px;
+    border-color: #211a51;
+    border-radius: 20px;
+    padding: 30px;
+    box-sizing: border-box;
+}
+.div_login_header {
+    margin-bottom: 24px;
+}
+.para_login_title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #211a51;
+    margin-bottom: 4px;
+}
+.para_login_subtitle {
+    font-size: 13px;
+    color: #888;
+}
+.div_login_form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+.div_login_inputrow {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.label_login {
+    font-size: 12px;
+    color: #555;
+    font-weight: 500;
+}
+.input_login {
+    width: 100%;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid #cec7ff;
+    padding: 0 12px;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s;
+}
+.input_login:focus {
+    border-color: #211a51;
+    border-width: 2px;
+}
+.para_login_error {
+    font-size: 12px;
+    color: #e05555;
+    min-height: 16px;
+}
+.div_login_buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.button_login_submit {
+    background-color: #211a51;
+    color: white;
+    border-color: #211a51;
+}
+.button_login_submit:hover {
+    background-color: #2e2570;
+}
+
+/* ── Logged-in label in header ── */
+.span_logged_in_label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #211a51;
+    margin-right: 4px;
+    align-self: center;
 }

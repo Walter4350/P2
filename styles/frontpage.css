@@ -9,7 +9,7 @@
     width: 800px;
     height: 60px;
     background-color: rgba(206, 199, 255, 0.2);
-    border-radius: 20px;;
+    border-radius: 20px;
     display: flex;
     align-items: center;
 }
@@ -31,7 +31,7 @@
     margin: 0px;
     margin-right: 20px;
     color: white;
-    background-color: #211A51;
+    background-color: #211a51;
 }
 .main {
     display: flex;
@@ -43,7 +43,7 @@
 .div_organisations {
     width: 250px;
     height: 350px;
-    background-color: #F9F9F9;
+    background-color: #f9f9f9;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
     margin: 10px;
@@ -65,7 +65,7 @@
     z-index: 2;
     width: 250px;
     height: 350px;
-    background-color: #F9F9F9;
+    background-color: #f9f9f9;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
     margin: 10px;
@@ -86,7 +86,7 @@
 .para_filter_title {
     font-size: 18px;
     font-weight: 600;
-    color: #211A51;
+    color: #211a51;
     margin: 20px 20px 10px 20px;
 }
 
@@ -101,7 +101,7 @@
     width: 200px;
     height: 36px;
     margin-left: 20px;
-    border: 1px solid #CEC7FF;
+    border: 1px solid #cec7ff;
     border-radius: 12px;
     padding-left: 10px;
     box-sizing: border-box;
@@ -111,10 +111,10 @@
     width: 200px;
     margin: 20px;
     background-color: white;
-    color: #211A51;
+    color: #211a51;
     border: 1px;
     border-style: solid;
-    border-color: #211A51;
+    border-color: #211a51;
 }
 
 .para_no_events {
@@ -136,7 +136,7 @@
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: #211A51;
+    color: #211a51;
 }
 
 .checkbox_filter_category {
@@ -150,4 +150,10 @@
     color: #555555;
     margin: 18px 20px 0 20px;
     line-height: 1.4;
+}
+
+.button_header_login.logged_in {
+    background-color: #ffc7c8;
+    color: #211a51;
+    border-color: #211a51;
 }
