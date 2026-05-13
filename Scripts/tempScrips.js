@@ -125,8 +125,6 @@ function createTestEvents() {
             category2: testEvent.category2,
             description: testEvent.description,
             image: testEvent.image,
-            createdAt: Date.now(),
-            creatorId: currentUserId
         });
     });
 
