@@ -37,7 +37,7 @@ const categoryFilterSocial = document.getElementById("checkbox_filter_social");
 const categoryFilterBoardgames = document.getElementById("checkbox_filter_boardgames");
 
 //Opretter event listenners
-buttonOverlayCreateEventOpen.addEventListener("click", openCreateEventMode);
+buttonOverlayCreateEventOpen.addEventListener("click", openOverlayCreateEvent);
 buttonOverlayCreateEventClose.addEventListener("click", closeOverlayCreateEvent,);
 buttonCreateEvent.addEventListener("click", createEvent);
 buttonOverlayClose.addEventListener("click", closeOverlayEvent);
@@ -56,27 +56,6 @@ let selectedOverlayEventId = null;
 let eventArray = loadEvents();
 let editingEventId = null;
 displayEvents();
-
-function openOverlayCreateEvent() {
-    overlayCreateEvent.style.display = "flex";
-}
-
-// Closes the create/edit event window and resets it
-function closeOverlayCreateEvent() {
-    overlayCreateEvent.style.display = "none";
-    editingEventId = null;
-    buttonCreateEvent.textContent = "Create Event";
-    clearCreateEventForm();
-}
-
-function openCreateEventMode() {
-    if (!userIsAdmin()) return;
-    editingEventId = null;
-    // Changes the button text back to "Create Event"
-    buttonCreateEvent.textContent = "Create Event";
-    clearCreateEventForm();
-    openOverlayCreateEvent();
-}
 
 function openOverlayEvent(event) {
     selectedOverlayEventId = event.id;
@@ -101,6 +80,22 @@ function openOverlayEvent(event) {
 function closeOverlayEvent() {
     overlayEvent.style.display = "none";
     selectedOverlayEventId = null;
+}
+
+function openOverlayCreateEvent() {
+    editingEventId = null;
+    // Changes the button text back to "Create Event"
+    buttonCreateEvent.textContent = "Create Event";
+    clearCreateEventForm();
+    overlayCreateEvent.style.display = "flex";
+}
+
+// Closes the create/edit event window and resets it
+function closeOverlayCreateEvent() {
+    overlayCreateEvent.style.display = "none";
+    editingEventId = null;
+    buttonCreateEvent.textContent = "Create Event";
+    clearCreateEventForm();
 }
 
 function createEvent() {
@@ -159,10 +154,6 @@ function createNewEvent(title, price, date, time, location, category1, category2
 function updateExistingEvent(title, price, date, time, location, category1, category2, description, imageURL,) {
     // Finds the event that should be edited
     const eventToEdit = eventArray.find((event) => event.id === editingEventId);
-    if (!eventToEdit) {
-        alert("The event could not be found.");
-        return false;
-    }
 
     eventToEdit.title = title;
     eventToEdit.price = price || "Free";
@@ -173,8 +164,25 @@ function updateExistingEvent(title, price, date, time, location, category1, cate
     eventToEdit.category2 = category2;
     eventToEdit.description = description;
     eventToEdit.image = imageURL;
+}
 
-    return true;
+// Opens an existing event in the form so it can be changed
+function editEvent(eventId) {
+    const eventToEdit = eventArray.find((event) => event.id === eventId);
+
+    editingEventId = eventId;
+    createEventTitle.value = eventToEdit.title;
+    createEventPrice.value = eventToEdit.price;
+    createEventDate.value = eventToEdit.date;
+    createEventTime.value = eventToEdit.time;
+    createEventLocation.value = eventToEdit.location;
+    createEventCategory1.value = eventToEdit.category1;
+    createEventCategory2.value = eventToEdit.category2 || "";
+    createEventDescription.value = eventToEdit.description;
+
+    // Changes the button text because the user is editing now
+    buttonCreateEvent.textContent = "Save Changes";
+    openOverlayCreateEvent();
 }
 
 function displayEvents() {
@@ -250,33 +258,6 @@ function displayEvents() {
 
         eventList.appendChild(newEvent);
     }
-}
-
-// Opens an existing event in the form so it can be changed
-function editEvent(eventId) {
-    if (!userIsAdmin()) return;
-    const eventToEdit = eventArray.find((event) => event.id === eventId);
-
-    if (!eventToEdit) {
-        alert("The event could not be found.");
-        return;
-    }
-
-    editingEventId = eventId;
-
-    createEventTitle.value = eventToEdit.title;
-    createEventPrice.value =
-        eventToEdit.price === "Free" ? "" : eventToEdit.price;
-    createEventDate.value = eventToEdit.date;
-    createEventTime.value = eventToEdit.time;
-    createEventLocation.value = eventToEdit.location;
-    createEventCategory1.value = eventToEdit.category1;
-    createEventCategory2.value = eventToEdit.category2 || "";
-    createEventDescription.value = eventToEdit.description;
-
-    // Changes the button text because the user is editing now
-    buttonCreateEvent.textContent = "Save Changes";
-    openOverlayCreateEvent();
 }
 
 // Deletes an event from the event list
