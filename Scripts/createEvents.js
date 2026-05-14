@@ -35,8 +35,12 @@ buttonOverlayCreateEventOpen.addEventListener("click", openCreateEventMode);
 buttonOverlayCreateEventClose.addEventListener("click", closeOverlayCreateEvent,);
 buttonCreateEvent.addEventListener("click", saveEventFromForm);
 buttonOverlayClose.addEventListener("click", closeOverlayEvent);
-buttonOverlayEventEdit.addEventListener("click", editSelectedOverlayEvent);
-buttonOverlayEventDelete.addEventListener("click", deleteSelectedOverlayEvent);
+buttonOverlayEventEdit.addEventListener("click", () => {
+    editEvent(selectedOverlayEventId);
+    closeOverlayEvent();
+
+});
+buttonOverlayEventDelete.addEventListener("click", () => deleteEvent(selectedOverlayEventId));
 searchEventsInput.addEventListener("input", displayEvents);
 categoryFilterSport.addEventListener("change", displayEvents);
 categoryFilterSocial.addEventListener("change", displayEvents);
@@ -44,9 +48,7 @@ categoryFilterBoardgames.addEventListener("change", displayEvents);
 
 let selectedOverlayEventId = null;
 let eventArray = loadEvents();
-
 let editingEventId = null;
-
 displayEvents();
 
 function openOverlayCreateEvent() {
@@ -79,9 +81,13 @@ function openOverlayEvent(event) {
     overlayEventDescription.textContent = event.description;
     overlayEventImage.src = event.image;
     // Show edit and delete buttons only for admins
-    const isAdmin = typeof userIsAdmin === "function" && userIsAdmin();
-    buttonOverlayEventEdit.style.display = isAdmin ? "inline-block" : "none";
-    buttonOverlayEventDelete.style.display = isAdmin ? "inline-block" : "none";
+    if(userIsAdmin()){
+        buttonOverlayEventEdit.style.display = "inline-block";
+        buttonOverlayEventDelete.style.display = "inline-block";
+    } else {
+        buttonOverlayEventEdit.style.display = "none";
+        buttonOverlayEventDelete.style.display = "none";
+    }
 
     overlayEvent.style.display = "flex";
 }
@@ -177,7 +183,6 @@ function displayEvents() {
         let newEvent = document.createElement("div");
         newEvent.addEventListener("click", () => openOverlayEvent(event));
         newEvent.classList.add("div_event");
-        newEvent.id = "event_" + event.id;
         newEvent.innerHTML = `
             <div class="div_event_picture">
                 <img class="img_event" src="${event.image}">
@@ -189,8 +194,16 @@ function displayEvents() {
                     </p>
                 </div>
                 <div class="div_event_categories">
-                    ${createCategoryHTML(event.category1)}
-                    ${createCategoryHTML(event.category2)}
+                    <div class="${"div_event_category_" + event.category1}">
+                        <p class="para_event_category">
+                        ${event.category1}
+                        </p>
+                    </div>
+                    <div class="${"div_event_category_" + event.category2}">
+                        <p class="para_event_category">
+                        ${event.category2}
+                        </p>
+                    </div>
                 </div>
                 <div class="div_event_additionalinfo">
                     <div class="div_event_date">
@@ -199,7 +212,7 @@ function displayEvents() {
                         </div>
                         <div class="div_event_text">
                             <p class="para_event_text">
-                                ${formatEventDate(event.date)}
+                                ${event.date}
                             </p>
                         </div>
                     </div>
@@ -260,64 +273,17 @@ function editEvent(eventId) {
 
 // Deletes an event from the event list
 function deleteEvent(eventId) {
-    if (!userIsAdmin()) return;
-    const eventToDelete = eventArray.find((event) => event.id === eventId);
-
-    if (!eventToDelete) {
-        alert("The event could not be found.");
+    if (!confirm("Are you sure you want to delete this event?")) {
         return;
     }
-
-    const shouldDelete = confirm("Are you sure you want to delete this event?");
-
-    if (!shouldDelete) {
-        return;
-    }
-
     // Keeps every event except the one with the matching ID
     eventArray = eventArray.filter((event) => event.id !== eventId);
-    // Saves the updated event list
+
     saveEvents();
     displayEvents();
     closeOverlayEvent();
 }
-// Starts editing the event that is selected in the overlay
-function editSelectedOverlayEvent() {
-    // If no event is selected, stop the function
-    if (selectedOverlayEventId === null) {
-        return;
-    }
-    // Save the selected event ID in a clearer variable name
-    const eventIdToEdit = selectedOverlayEventId;
 
-    closeOverlayEvent();
-    // Open the selected event in edit mode
-    editEvent(eventIdToEdit);
-}
-
-function deleteSelectedOverlayEvent() {
-    // If no event is selected, stop the function
-    if (selectedOverlayEventId === null) {
-        return;
-    }
-
-    deleteEvent(selectedOverlayEventId);
-}
-// Creates the small category label shown on each event card
-function createCategoryHTML(category) {
-    // If there is no category, show nothing
-    if (!category) {
-        return "";
-    }
-
-    return `
-        <div class="${"div_event_category_" + category}">
-            <p class="para_event_category">
-                ${category}
-            </p>
-        </div>
-    `;
-}
 // Finds the events that should be shown after search and category filtering
 function getFilteredEvents() {
     const searchText = searchEventsInput.value.toLowerCase().trim();
@@ -353,22 +319,9 @@ function getFilteredEvents() {
 
     return filteredEvents;
 }
-// Converts an event date and time into a number, so events can be sorted by time
+// Converts an event date and time into format "2026-05-20T18:00", that JS can understand and use
 function getEventDateTime(event) {
-    return new Date(`${event.date}T${event.time}`).getTime(); // millisekunder siden 1970
-}
-// Changes the date from YYYY-MM-DD to DD/MM/YYYY, so it is easier to read
-function formatEventDate(dateString) {
-    // If there is no date, return empty text
-    if (!dateString) {
-        return "";
-    }
-    // Splits the date into year, month and day
-    const dateParts = dateString.split("-");
-    if (dateParts.length !== 3) {
-        return dateString;
-    }
-    return `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+    return new Date(event.date + "T" + event.time);
 }
 
 // Saves the event list in the browser, so events are not lost when the page refreshes
