@@ -1,8 +1,8 @@
-//starter med at loade ind all DOM
-const overlayCreateEvent = document.getElementById("overlay_create_event");
-const overlayEvent = document.getElementById("overlay_event");
+//inderlæser event listen
 const eventList = document.getElementById("event_list");
 
+//inderlæser create event overlay
+const overlayCreateEvent = document.getElementById("overlay_create_event");
 const createEventTitle = document.getElementById("input_event_create_title");
 const createEventPrice = document.getElementById("input_event_create_price");
 const createEventDate = document.getElementById("input_event_create_date");
@@ -11,20 +11,26 @@ const createEventLocation = document.getElementById("input_event_create_location
 const createEventCategory1 = document.getElementById("select_event_create_category_1",);
 const createEventCategory2 = document.getElementById("select_event_create_category_2");
 const createEventDescription = document.getElementById("textarea_input_event_description");
+const createEventImage = document.getElementById("input_event_create_image");
 
+//indlæser event overlay
+const overlayEvent = document.getElementById("overlay_event");
 const overlayEventTitle = document.getElementById("overlay_event_title");
 const overlayEventPrice = document.getElementById("overlay_event_price");
 const overlayEventLocation = document.getElementById("overlay_event_location");
 const overlayEventDescription = document.getElementById("overlay_event_description",);
 const overlayEventImage = document.getElementById("img_event_overlay");
 
+//indlæser ALLE knapper
 const buttonOverlayCreateEventOpen = document.getElementById("button_overlay_create_event_open");
 const buttonOverlayCreateEventClose = document.getElementById("button_overlay_create_event_close");
 const buttonCreateEvent = document.getElementById("button_event_create");
 const buttonOverlayClose = document.getElementById("button_overlay_event_close");
 const buttonOverlayEventEdit = document.getElementById("button_overlay_event_edit");
 const buttonOverlayEventDelete = document.getElementById("button_overlay_event_delete");
+const buttonClearFilters = document.getElementById("button_clear_filters");
 
+//indlæser søge boksen
 const searchEventsInput = document.getElementById("input_search_events");
 const categoryFilterSport = document.getElementById("checkbox_filter_sport");
 const categoryFilterSocial = document.getElementById("checkbox_filter_social");
@@ -33,18 +39,18 @@ const categoryFilterBoardgames = document.getElementById("checkbox_filter_boardg
 //Opretter event listenners
 buttonOverlayCreateEventOpen.addEventListener("click", openCreateEventMode);
 buttonOverlayCreateEventClose.addEventListener("click", closeOverlayCreateEvent,);
-buttonCreateEvent.addEventListener("click", saveEventFromForm);
+buttonCreateEvent.addEventListener("click", createEvent);
 buttonOverlayClose.addEventListener("click", closeOverlayEvent);
 buttonOverlayEventEdit.addEventListener("click", () => {
     editEvent(selectedOverlayEventId);
     closeOverlayEvent();
-
 });
 buttonOverlayEventDelete.addEventListener("click", () => deleteEvent(selectedOverlayEventId));
 searchEventsInput.addEventListener("input", displayEvents);
 categoryFilterSport.addEventListener("change", displayEvents);
 categoryFilterSocial.addEventListener("change", displayEvents);
 categoryFilterBoardgames.addEventListener("change", displayEvents);
+buttonClearFilters.addEventListener("click", clearFilters);
 
 let selectedOverlayEventId = null;
 let eventArray = loadEvents();
@@ -94,11 +100,10 @@ function openOverlayEvent(event) {
 
 function closeOverlayEvent() {
     overlayEvent.style.display = "none";
-    // Removes the selected event from the overlay
     selectedOverlayEventId = null;
 }
-// Saves the form as either a new event or an edited event
-function saveEventFromForm() {
+
+function createEvent() {
     //Gets information about the event
     const title = createEventTitle.value.trim();
     const price = createEventPrice.value;
@@ -108,7 +113,10 @@ function saveEventFromForm() {
     const category1 = createEventCategory1.value;
     const category2 = createEventCategory2.value;
     const description = createEventDescription.value.trim();
-    const imageURL = "Pictures/Events/football.jpg";
+    let imageURL = "Pictures/Events/football.jpg";
+    if (createEventImage.files[0]) {
+    imageURL = URL.createObjectURL(createEventImage.files[0]);
+    }
 
     if (!title || !date || !time || !location || (!category1 && !category2)) {
         alert("Please fill out title, date, time, location and at least one category.");
@@ -346,6 +354,7 @@ function clearCreateEventForm() {
     createEventCategory1.value = "";
     createEventCategory2.value = "";
     createEventDescription.value = "";
+    createEventImage.value = "";
 }
 // Clear the search function so its blank again
 function clearFilters() {
